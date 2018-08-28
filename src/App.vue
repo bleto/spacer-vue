@@ -9,4 +9,8 @@
     <router-view/>
   </div>
 </template>
+<<<<<<< HEAD
+=======
+
+>>>>>>> ddc1d1ed1513d53b1cadeb274e7e649527e5d26f
 <style lang="scss" scoped />
