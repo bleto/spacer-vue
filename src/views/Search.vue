@@ -6,8 +6,9 @@
     <Claim v-if="step === 0"/>
     <SearchInput v-model="searchValue" @input="handleInput" :dark="step === 1"/>
     <div class="results" v-if="results && !loading && step === 1"> 
-      <Item v-for="item in results" :item="item" :key="item.data[0].nasa_id"/>
+      <Item v-for="item in results" :item="item" :key="item.data[0].nasa_id" @click.native="handleModalOpen(item)"/>
     </div>
+    <Modal v-if="modalOpen" @closeModal="modalOpen = false" :item="modalItem"/>
   </main>
 </template>
 
@@ -16,6 +17,7 @@
   import SearchInput from '@/components/SearchInput.vue';
   import Background from '@/components/Background.vue';
   import Item from '@/components/Item.vue';
+  import Modal from '@/components/Modal.vue';
   import axios from 'axios';
   import debounce from 'lodash.debounce';
   
@@ -27,10 +29,13 @@
       Claim,
       SearchInput,
       Background,
-      Item
+      Item,
+      Modal
     },
     data() {
       return {
+        modalOpen: false,
+        modalItem: null,
         loading: false,
         step: 0,
         searchValue: '',
@@ -38,6 +43,10 @@
       };
     },
     methods: {
+      handleModalOpen: function(item){
+          this.modalOpen = true;
+          this.modalItem = item;
+      },
       handleInput: debounce(function() {
         this.loading = true;
         console.log(this.searchValue)
