@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <Background />
     <header class="header">
       <nav class="nav">
         <router-link to="/" class="link logo">Spacer</router-link>
@@ -9,30 +10,46 @@
     <router-view/>
   </div>
 </template>
+<script>
+import Background from '@/components/Background.vue';
+export default {
+  name: 'App',
+  components:{
+    Background
+  }
+}
+</script>
 
 <style lang="scss">
-  @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,700');
+  @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,600,800');
+
+  $font-weight-light: 300;
+  $font-weight-normal: 400;
+  $font-weight-bold: 600;
+  $font-weight-black: 800;
+
   *{ 
-    box-sizing: border-box
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body{
     margin:0;
     padding:0;
     font-family: 'Montserrat', sans-serif;
+    color: #fff;
   }
   .app{
     margin: 0;
     width: 100%;
     height: 100vh;
-    position: relative;
-    background: url('./assets/bg.jpg') 0 40% / cover no-repeat;
+    // background: #bbb;
 
     .header{
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 40px;
 
       .link{
         font-size: 16px;

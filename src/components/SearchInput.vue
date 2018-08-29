@@ -1,50 +1,45 @@
 <template>
-  <div class="searchWrapper">
-      <input name="search"  id="search" v-model="searchValue" @input="handleInput"/>
-      <ul>
-        <li v-for="item in results" :key="item.data[0].nasa_id">
-          <p>{{item.data[0].description}}</p>
-        </li>
-      </ul>
-  </div>
+  <input name="search"  id="search" :value="value" @input="handleChange"/>
 </template>
 <script>
-  import axios from 'axios';
-  import debounce from 'lodash.debounce';
-  
-  const API = 'https://images-api.nasa.gov/search';
   export default {
     name: 'SearchInput',
-    data() {
-      return {
-        searchValue: '',
-        results: []
-      };
+    props: {
+      value: {
+        type: String,
+        required: true
+      }
     },
     methods: {
-      handleInput: debounce(function() {
-        axios.get(`${API}?q=${this.searchValue}&media_type=image`)
-        .then((resp) => {
-          this.results = resp.data.collection.items;
-        }).catch( err => {
-          console.error(err);
-        })
-      },500)
+      handleChange(e) {
+        this.$emit('input', e.target.value);
+      }
     }
   };
 </script>
 
 <style lang="scss" scoped>
-  .searchWrapper{
+
+  input{
     display: flex;
     flex-direction: column;
     width: 250px;
+    margin-top:50px;
+    height: 30px;
+    border: 0;
+    background: none;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+    transition: box-shadow .4s ease-out;
+    @media (min-width: 1024px) {
+      font-weight: 400;
+    }
 
-    input{
-      height: 30px;
-      border: 0;
-      background: none;
-      border-bottom: 1px solid black
+    &:focus{
+      outline: none;
+      box-shadow: 0 10px 20px -9px rgba(255,255,255,0.5);
     }
   }
 </style>
