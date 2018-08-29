@@ -1,6 +1,5 @@
 <template>
   <div class="app">
-    <Background />
     <header class="header">
       <nav class="nav">
         <router-link to="/" class="link logo">Spacer</router-link>
@@ -11,12 +10,8 @@
   </div>
 </template>
 <script>
-import Background from '@/components/Background.vue';
 export default {
-  name: 'App',
-  components:{
-    Background
-  }
+  name: 'App'
 }
 </script>
 

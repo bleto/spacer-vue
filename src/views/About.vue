@@ -1,12 +1,17 @@
 <template>
   <main class="wrapper">
+    <Background/>
     <h1>Its me !</h1>
     <a href="mailto:p.bletek@gmail.com">p.bletek@gmail.com</a>
   </main>
 </template>
 <script>
+  import Background from '@/components/Background.vue';
   export default {
-    name: 'About'
+    name: 'About',
+    components:{
+      Background
+    }
   };
 </script>
 <style lang="scss" scoped>

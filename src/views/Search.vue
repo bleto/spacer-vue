@@ -1,13 +1,21 @@
 <template>
-  <main class="wrapper">
-    <Claim />
-    <SearchInput v-model="searchValue" @input="handleInput"/>
+  <main :class="[{flexStart: step === 1}, 'wrapper' ]">
+    <transition name="fade">
+      <Background v-if="step === 0"/>
+    </transition>
+    <Claim v-if="step === 0"/>
+    <SearchInput v-model="searchValue" @input="handleInput" :dark="step === 1"/>
+    <div class="results" v-if="results && !loading && step === 1"> 
+      <Item v-for="item in results" :item="item" :key="item.data[0].nasa_id"/>
+    </div>
   </main>
 </template>
 
 <script>
   import Claim from '@/components/Claim.vue';
   import SearchInput from '@/components/SearchInput.vue';
+  import Background from '@/components/Background.vue';
+  import Item from '@/components/Item.vue';
   import axios from 'axios';
   import debounce from 'lodash.debounce';
   
@@ -17,20 +25,27 @@
     name: 'Search',
     components:{
       Claim,
-      SearchInput
+      SearchInput,
+      Background,
+      Item
     },
     data() {
       return {
+        loading: false,
+        step: 0,
         searchValue: '',
         results: []
       };
     },
     methods: {
       handleInput: debounce(function() {
+        this.loading = true;
         console.log(this.searchValue)
         axios.get(`${API}?q=${this.searchValue}&media_type=image`)
         .then((resp) => {
           this.results = resp.data.collection.items;
+          this.loading = false
+          this.step = 1;
         }).catch( err => {
           console.error(err);
         })
@@ -39,6 +54,12 @@
   };
 </script>
 <style lang="scss" scoped>
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s ease;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
   .wrapper{
     margin: 0;
     width: 100%;
@@ -48,6 +69,21 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    &.flexStart{
+      justify-content: flex-start
+    }
+  }
+  .results{
+    margin-top:50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+
+    @media (min-width: 768px) {
+      width: 90%;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
   }
 </style>
 
